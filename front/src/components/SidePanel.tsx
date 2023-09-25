@@ -14,6 +14,7 @@ import {
   CloseButton,
   UserAvatarButton,
   NotificationsButton,
+  CustomButton,
 } from '@components/index';
 import { SidePanelRefType } from '@interfaces/index';
 
@@ -68,19 +69,28 @@ function SidePanel(
           )}
         </div>
 
-        {/* Contenedor de enlaces */}
         <div className="flex flex-col mt-16 h-100">
           <div className="flex flex-col space-y-10">
             {NAV_LINKS.map((link, index) => (
-              <Link key={index} to={link.href}>
+              <Link
+                key={index}
+                to={link.href}
+                className="w-fit border-b-2 border-transparent hover:mx-2 hover:border-white/50 transition-all duration-300">
                 {link.title}
               </Link>
             ))}
           </div>
-          <div className="my-16">
+          <div className="my-16 relative right-[4px]">
             <AddMovieButton />
           </div>
-          <button className="max-w-fit">Cerrar sesión</button>
+          <CustomButton
+            testId="end-sesion-button"
+            variant="ghost"
+            text="cerrar sesión"
+            label="cerrar sesión"
+            bgColorOnHover="bg-rose-600"
+            onPress={() => {}}
+          />
         </div>
       </div>
     </>
