@@ -64,19 +64,21 @@ function Home() {
   return (
     <div data-testid="home" className="relative">
       <div
-        className="absolute w-full h-[550px] md:h-screen"
+        className="absolute w-full h-[550px] md:h-screen transition-all duration-[2.5s] ease-in-out"
         style={{
           background: nowPlayingMovie
-            ? `linear-gradient(transparent, #242424),
-        url(${process.env.REACT_APP_IMDB_IMAGE}/${
-          nowPlayingMovie!.backdrop_path
-        }) 50% / cover no-repeat`
+            ? `url(${process.env.REACT_APP_IMDB_IMAGE}${
+                nowPlayingMovie!.backdrop_path
+              }) 50% / cover no-repeat`
             : undefined,
         }}></div>
       <main
         className={`${
           sidePanelIsOpen ? 'fixed' : 'relative'
-        } inset-0 h-auto px-6 md:px-10 lg:px-20 pt-5 md:pt-7 pb-14`}>
+        } inset-0 h-auto px-6 md:px-10 lg:px-20 pt-5 md:pt-7 pb-14`}
+        style={{
+          background: 'linear-gradient(transparent, rgb(var(--black))',
+        }}>
         <NavBar />
 
         {/* SidePanel */}
