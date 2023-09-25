@@ -18,6 +18,11 @@
 }
 
 @layer base {
+  :root {
+    /*colors*/
+    --black: 35 35 35;
+    --aqua: 100 238 188;
+  }
 
   h1,
   h2,
@@ -31,11 +36,12 @@
     letter-spacing: 4px;
     text-transform: uppercase;
   }
-}
 
-body {
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(var(--black));
+  }
 }

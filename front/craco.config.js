@@ -9,6 +9,10 @@ module.exports = {
       '@api': path.resolve(__dirname, 'src/api'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@constants': path.resolve(__dirname, 'src/constants'),
+      '@context': path.resolve(__dirname, 'src/context'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@interfaces': path.resolve(__dirname, 'src/interfaces'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
     },
   },
   jest: {

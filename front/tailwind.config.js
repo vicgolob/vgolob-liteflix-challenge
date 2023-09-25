@@ -9,7 +9,8 @@ module.exports = {
         light: ['BebasNeue-Light', 'sans-serif'],
       },
       colors: {
-        black: '#242424',
+        black: 'rgb(var(--black) / <alpha-value>)',
+        aqua: 'rgb(var(--aqua) / <alpha-value>)',
       },
     },
   },

@@ -1,9 +1,10 @@
+import { CustomButton } from '@components/index';
 import IconAdd from '@assets/icons/add.svg';
-import CustomButton from '@components/CustomButton';
 
 function AddMovieButton() {
   return (
     <CustomButton
+      variant="ghost"
       testId="add-movie-button"
       image={IconAdd}
       label="go to user's profile"

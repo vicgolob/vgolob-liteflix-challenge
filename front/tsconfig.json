@@ -8,7 +8,11 @@
       "@assets/*": ["assets/*"],
       "@api/*": ["api/*"],
       "@components/*": ["components/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@context/*": ["context/*"],
+      "@hooks/*": ["hooks/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@pages/*": ["pages/*"]
     },
     "skipLibCheck": true,
     "esModuleInterop": true,

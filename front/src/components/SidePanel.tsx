@@ -1,20 +1,26 @@
-import { useState, useEffect, Key } from 'react';
+import {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+  Ref,
+} from 'react';
 import { Link } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '@assets/logo.svg';
-import { INavLink, NAV_LINKS } from '../constants/navLinks';
-import AddMovieButton from './AddMovieButton';
-import CloseButton from './CloseButton';
-import UserAvatarButton from './UserAvatarButton';
-import NotificationsButton from './NotificationsButton';
+import { NAV_LINKS } from '@constants/navLinks';
+import {
+  AddMovieButton,
+  CloseButton,
+  UserAvatarButton,
+  NotificationsButton,
+} from '@components/index';
+import { SidePanelRefType } from '@interfaces/index';
 
-function SidePanel({
-  isMobile,
-  onClosePanel,
-}: {
-  isMobile: boolean;
-  onClosePanel: Function;
-}) {
+function SidePanel(
+  { isMobile, onClosePanel }: { isMobile: boolean; onClosePanel: Function },
+  ref: Ref<SidePanelRefType>,
+) {
   const initialPosition = isMobile ? '-translate-x-full' : 'translate-x-[200%]';
   const [translateClassName, setTransalateClassName] =
     useState(initialPosition);
@@ -29,32 +35,43 @@ function SidePanel({
 
   function handleClosePanel() {
     setTransalateClassName(initialPosition);
-    // wait for animation to end
+    // Espera a que termine la animación antes de cerrar el panel
     setTimeout(() => onClosePanel(), 1000);
   }
 
+  useImperativeHandle(ref, () => ({
+    forceClosePanel: handleClosePanel,
+  }));
+
   return (
     <>
+      {/* Backdrop del panel lateral */}
+      <div className="fixed inset-0 z-50 hidden md:block bg-black/70"></div>
       <div
-        className={`font-regular fixed z-20 inset-0 p-7 w-screen md:w-1/2 h-screen md:px-20 md:py-7 bg-black md:bg-black/90 text-white transition-all ease-in-out duration-1000 transform ${translateClassName}`}>
-        {/* Side panel header for Mobile */}
-        <div className="md:hidden flex justify-between items-center">
+        data-testid="side-panel"
+        className={`fixed inset-0 z-50 font-regular h-full w-screen md:w-1/2 py-7 px-6 md:px-10 lg:px-20 md:py-7 bg-black md:bg-black/90 overflow-y-auto text-white transition-all ease-in-out duration-1000 transform ${translateClassName}`}>
+        <div className="flex justify-between items-center">
           <CloseButton onPress={handleClosePanel} />
-          <Logo width={113} aria-label="Liteflix logo" />
-          <UserAvatarButton />
+
+          {isMobile && (
+            <>
+              <Logo width={113} aria-label="Liteflix logo" />
+              <UserAvatarButton />
+            </>
+          )}
+
+          {!isMobile && (
+            <div className="flex items-center space-x-10">
+              <NotificationsButton />
+              <UserAvatarButton />
+            </div>
+          )}
         </div>
-        {/* Side panel header for Tablet & Above */}
-        <div className="hidden md:flex justify-between items-center">
-          <CloseButton onPress={handleClosePanel} />
-          <div className="flex items-center space-x-10">
-            <NotificationsButton />
-            <UserAvatarButton />
-          </div>
-        </div>
-        {/* Links container */}
-        <div className="flex flex-col mt-16">
+
+        {/* Contenedor de enlaces */}
+        <div className="flex flex-col mt-16 h-100">
           <div className="flex flex-col space-y-10">
-            {NAV_LINKS.map((link: INavLink, index: Key) => (
+            {NAV_LINKS.map((link, index) => (
               <Link key={index} to={link.href}>
                 {link.title}
               </Link>
@@ -63,13 +80,11 @@ function SidePanel({
           <div className="my-16">
             <AddMovieButton />
           </div>
-          <button className="max-w-fit">cerrar sesión</button>
+          <button className="max-w-fit">Cerrar sesión</button>
         </div>
       </div>
-      {/* Side panel backdrop */}
-      <div className="fixed top-0 left-0 z-10 h-screen w-full hidden md:block bg-black/70"></div>
     </>
   );
 }
 
-export default SidePanel;
+export default forwardRef(SidePanel);

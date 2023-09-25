@@ -1,13 +1,14 @@
+import { CustomButton } from '@components/index';
 import IconMenu from '@assets/icons/menu.svg';
-import CustomButton from '@components/CustomButton';
 
 function MenuButton({ onPress }: { onPress: Function }) {
   return (
     <CustomButton
+      variant="ghost"
       testId="menu-button"
       image={IconMenu}
       label="open menu"
-      onPress={() => onPress()}
+      onPress={onPress}
     />
   );
 }

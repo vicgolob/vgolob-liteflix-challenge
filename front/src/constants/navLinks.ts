@@ -1,8 +1,3 @@
-export interface INavLink {
-  title: string;
-  href: string;
-}
-
 export const NAV_LINKS = [
   { title: 'inicio', href: '#' },
   { title: 'series', href: '#' },

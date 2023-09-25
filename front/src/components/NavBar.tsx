@@ -1,60 +1,45 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 
 import { ReactComponent as Logo } from '@assets/logo.svg';
-import SidePanel from './SidePanel';
-import AddMovieButton from './AddMovieButton';
-import UserAvatarButton from './UserAvatarButton';
-import MenuButton from './MenuButton';
-import NotificationsButton from './NotificationsButton';
+import {
+  AddMovieButton,
+  UserAvatarButton,
+  MenuButton,
+  NotificationsButton,
+} from '@components/index';
+import useScreenSize from '@hooks/useScreenSize';
+import SidePanelContext from '@context/Context';
 
 function NavBar() {
-  const [isSidePanelOpened, setIsSidePanelOpened] = useState(false);
-  const [isMobileSidePanel, setIsMobileSidePanel] = useState(false);
-
-  function openSideMenu({ menuType }: { menuType: string }) {
-    setIsMobileSidePanel(menuType.toLowerCase() === 'mobile');
-    setIsSidePanelOpened(true);
-  }
+  const { screenIsPhoneSize } = useScreenSize();
+  const { toggleSidePanelIsOpen } = useContext(SidePanelContext);
 
   return (
-    <>
+    <nav className="flex justify-between items-center">
       {/* NavBar Mobile */}
-      <div
-        data-testid="navbar"
-        className="md:hidden flex justify-between items-center">
-        <MenuButton
-          onPress={() => {
-            openSideMenu({ menuType: 'mobile' });
-          }}
-        />
-        <Logo width={113} aria-label="Liteflix logo" />
-        <UserAvatarButton />
-      </div>
-      {/* NavBar Tablet & Above */}
-      <div className="hidden md:flex justify-between items-center">
-        <div className="flex space-x-10 items-center">
+      {screenIsPhoneSize() && (
+        <>
+          <MenuButton onPress={toggleSidePanelIsOpen} />
           <Logo width={113} aria-label="Liteflix logo" />
-          <AddMovieButton />
-        </div>
-        <div className="flex space-x-10 items-center">
-          <MenuButton
-            onPress={() => {
-              openSideMenu({ menuType: 'not-mobile' });
-            }}
-          />
-
-          <NotificationsButton />
           <UserAvatarButton />
-        </div>
-      </div>
-      {/* SidePanel */}
-      {isSidePanelOpened && (
-        <SidePanel
-          isMobile={isMobileSidePanel}
-          onClosePanel={() => setIsSidePanelOpened(false)}
-        />
+        </>
       )}
-    </>
+
+      {/* NavBar Tablet & Above */}
+      {!screenIsPhoneSize() && (
+        <>
+          <div className="flex space-x-10 items-center">
+            <Logo width={113} aria-label="Liteflix logo" />
+            <AddMovieButton />
+          </div>
+          <div className="flex space-x-10 items-center">
+            <MenuButton onPress={toggleSidePanelIsOpen} />
+            <NotificationsButton />
+            <UserAvatarButton />
+          </div>
+        </>
+      )}
+    </nav>
   );
 }
 
