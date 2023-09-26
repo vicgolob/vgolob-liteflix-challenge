@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-
 import { ReactComponent as Logo } from '@assets/logo.svg';
 import {
   AddMovieButton,
@@ -7,33 +5,34 @@ import {
   MenuButton,
   NotificationsButton,
 } from '@components/index';
-import useScreenSize from '@hooks/useScreenSize';
-import SidePanelContext from '@context/Context';
 
-function NavBar() {
-  const { screenIsPhoneSize } = useScreenSize();
-  const { toggleSidePanelIsOpen } = useContext(SidePanelContext);
-
+function NavBar({
+  showPhoneScreenLayout,
+  onMenuButtonPress,
+}: {
+  showPhoneScreenLayout: boolean;
+  onMenuButtonPress: Function;
+}) {
   return (
     <nav className="flex justify-between items-center">
       {/* NavBar Mobile */}
-      {screenIsPhoneSize() && (
+      {showPhoneScreenLayout && (
         <>
-          <MenuButton onPress={toggleSidePanelIsOpen} />
+          <MenuButton onPress={onMenuButtonPress} />
           <Logo width={113} aria-label="Liteflix logo" />
           <UserAvatarButton />
         </>
       )}
 
       {/* NavBar Tablet & Above */}
-      {!screenIsPhoneSize() && (
+      {!showPhoneScreenLayout && (
         <>
           <div className="flex space-x-10 items-center">
             <Logo width={113} aria-label="Liteflix logo" />
             <AddMovieButton />
           </div>
           <div className="flex space-x-10 items-center">
-            <MenuButton onPress={toggleSidePanelIsOpen} />
+            <MenuButton onPress={onMenuButtonPress} />
             <NotificationsButton />
             <UserAvatarButton />
           </div>

@@ -19,16 +19,23 @@ import {
 import { SidePanelRefType } from '@interfaces/index';
 
 function SidePanel(
-  { isMobile, onClosePanel }: { isMobile: boolean; onClosePanel: Function },
+  {
+    showPhoneScreenLayout,
+    onClosePanel,
+  }: { showPhoneScreenLayout: boolean; onClosePanel: Function },
   ref: Ref<SidePanelRefType>,
 ) {
-  const initialPosition = isMobile ? '-translate-x-full' : 'translate-x-[200%]';
+  const initialPosition = showPhoneScreenLayout
+    ? '-translate-x-full'
+    : 'translate-x-[200%]';
   const [translateClassName, setTransalateClassName] =
     useState(initialPosition);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTransalateClassName(isMobile ? 'translate-x-0' : 'translate-x-full');
+      setTransalateClassName(
+        showPhoneScreenLayout ? 'translate-x-0' : 'translate-x-full',
+      );
     }, 0);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,14 +61,14 @@ function SidePanel(
         <div className="flex justify-between items-center">
           <CloseButton onPress={handleClosePanel} />
 
-          {isMobile && (
+          {showPhoneScreenLayout && (
             <>
               <Logo width={113} aria-label="Liteflix logo" />
               <UserAvatarButton />
             </>
           )}
 
-          {!isMobile && (
+          {!showPhoneScreenLayout && (
             <div className="flex items-center space-x-10">
               <NotificationsButton />
               <UserAvatarButton />

@@ -75,22 +75,25 @@ function Home() {
       <main
         className={`${
           sidePanelIsOpen ? 'fixed' : 'relative'
-        } inset-0 h-auto px-6 md:px-10 lg:px-20 pt-5 md:pt-7 pb-14`}
+        } inset-0 h-auto md:min-h-screen px-6 md:px-10 lg:px-20 pt-5 md:pt-7 pb-14`}
         style={{
           background: 'linear-gradient(transparent, rgb(var(--black))',
         }}>
-        <NavBar />
+        <NavBar
+          showPhoneScreenLayout={screenIsPhoneSize()}
+          onMenuButtonPress={toggleSidePanelIsOpen}
+        />
 
         {/* SidePanel */}
         {sidePanelIsOpen && (
           <SidePanel
             ref={sidePanelRef}
-            isMobile={sidePanelIsMobile}
+            showPhoneScreenLayout={screenIsPhoneSize()}
             onClosePanel={toggleSidePanelIsOpen}
           />
         )}
 
-        <section className="relative flex flex-col md:flex-row space-y-16 md:justify-between">
+        <section className="md:min-h-[800px] relative flex flex-col md:flex-row space-y-16 md:justify-between">
           {/* Now playing movie section */}
           <div className="h-[550px] md:h-auto md:w-3/4 flex flex-col justify-end space-y-4 items-center md:items-start">
             <p className="font-light text-white text-xl">

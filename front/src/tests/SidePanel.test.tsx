@@ -5,25 +5,23 @@ import { SidePanel } from '@components/index';
 
 describe('SidePanel', () => {
   it('should open side panel with non-mobile styles', () => {
-    const isMobile = false;
     const onClosePanel = jest.fn();
 
     render(
       <Router>
-        <SidePanel isMobile={isMobile} onClosePanel={onClosePanel} />
+        <SidePanel showPhoneScreenLayout={false} onClosePanel={onClosePanel} />
       </Router>,
     );
     expect(screen.getByTestId('side-panel')).toHaveClass('translate-x-[200%]');
     expect(screen.getByTestId('notifications-button')).toBeInTheDocument();
   });
 
-  it('should open side panel correctly on mobile devices', () => {
-    const isMobile = true;
+  it('should open side panel correctly on phone devices', () => {
     const onClosePanel = jest.fn();
 
     render(
       <Router>
-        <SidePanel isMobile={isMobile} onClosePanel={onClosePanel} />
+        <SidePanel showPhoneScreenLayout={true} onClosePanel={onClosePanel} />
       </Router>,
     );
 
@@ -32,11 +30,10 @@ describe('SidePanel', () => {
   });
 
   it('should close side panel when close button is pressed', async () => {
-    const isMobile = false;
     const onClosePanel = jest.fn();
     render(
       <Router>
-        <SidePanel isMobile={isMobile} onClosePanel={onClosePanel} />
+        <SidePanel showPhoneScreenLayout={false} onClosePanel={onClosePanel} />
       </Router>,
     );
 

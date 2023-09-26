@@ -4,18 +4,9 @@ import { NavBar } from '@components/index';
 
 describe('NavBar', () => {
   it('should render phone-sized NavBar', () => {
-    jest.mock('@hooks/useScreenSize', () => {
-      function useScreenSize() {
-        return {
-          screenIsPhoneSize: () => true,
-        };
-      }
-
-      return useScreenSize;
-    });
-
-    render(<NavBar />);
-
+    render(
+      <NavBar showPhoneScreenLayout={true} onMenuButtonPress={() => {}} />,
+    );
     expect(screen.getByRole('navigation')).toBeInTheDocument();
     expect(screen.getByTestId('menu-button')).toBeInTheDocument();
     expect(screen.getByLabelText('Liteflix logo')).toBeInTheDocument();
@@ -23,18 +14,9 @@ describe('NavBar', () => {
   });
 
   it('should render non-phone-sized NavBar', () => {
-    jest.mock('@hooks/useScreenSize', () => {
-      function useScreenSize() {
-        return {
-          screenIsPhoneSize: () => false,
-        };
-      }
-
-      return useScreenSize;
-    });
-
-    render(<NavBar />);
-
+    render(
+      <NavBar showPhoneScreenLayout={false} onMenuButtonPress={() => {}} />,
+    );
     expect(screen.getByRole('navigation')).toBeInTheDocument();
     expect(screen.getByLabelText('Liteflix logo')).toBeInTheDocument();
     expect(screen.getByTestId('add-movie-button')).toBeInTheDocument();
