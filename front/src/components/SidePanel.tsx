@@ -51,7 +51,7 @@ function SidePanel(
     revertCollapse?: boolean;
   }) {
     setTransalateClassName(revertCollapse ? reversePosition : initialPosition);
-    // Espera a que termine la animación antes de cerrar el panel
+    // wait for animation to end to hide panel
     setTimeout(() => onClosePanel(), 1000);
   }
 
@@ -61,7 +61,7 @@ function SidePanel(
 
   return (
     <>
-      {/* Backdrop del panel lateral */}
+      {/* Backdrop */}
       <div className="fixed inset-0 z-50 hidden md:block bg-black/70"></div>
       <div
         data-testid="side-panel"
