@@ -27,7 +27,7 @@ function useScreenSize() {
     return screenSize.width <= SCREEN_PHONE_MAX_WIDTH;
   }
 
-  return { screenSize, screenIsPhoneSize };
+  return { screenIsPhoneSize };
 }
 
 export default useScreenSize;
