@@ -11,6 +11,7 @@ describe('Home', () => {
 
   it('should display the current now playing movie', () => {
     const nowPlayingMovieMock = {
+      id: 2341,
       backdrop_path: 'path/to/image',
       title: 'Movie Title',
       vote_average: 7.5,
