@@ -5,7 +5,7 @@ function CustomButton({
   onPress,
   image = '',
   text = '',
-  bgColorOnHover = 'bg-aqua',
+  bgColorOnHover = 'bg-aqua/80',
   disabled = false,
 }: {
   variant?: 'primary' | 'secondary' | 'ghost';
@@ -24,7 +24,7 @@ function CustomButton({
       'w-60 h-14 bg-black/80 hover:bg-white/50 disabled:bg-white/50 disabled:hover:bg-white/50',
     secondary:
       'w-60 h-14 border border-white/50 bg-black/50 hover:bg-aqua/80 disabled:border-white/20 disabled:bg-white/10 disabled:hover:bg-white/10',
-    ghost: `max-w-fit rounded-full p-2 hover:${bgColorOnHover}/80 transition duration-300`,
+    ghost: `max-w-fit rounded-full p-2 hover:${bgColorOnHover} transition duration-300`,
   };
   const variantClassName =
     variantClassMap[variant.toLocaleLowerCase()] || 'max-w-fit';
@@ -35,7 +35,7 @@ function CustomButton({
       data-testid={testId}
       aria-label={label}
       onClick={() => onPress()}
-      className={`flex justify-center items-center space-x-3 text-white  ${variantClassName}`}>
+      className={`flex justify-center items-center space-x-3 text-white ${variantClassName} `}>
       {image?.length > 0 && (
         <img
           src={image}

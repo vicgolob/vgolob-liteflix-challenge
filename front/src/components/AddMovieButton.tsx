@@ -10,6 +10,7 @@ function AddMovieButton() {
       label="go to user's profile"
       text="agregar película"
       onPress={() => {}}
+      bgColorOnHover="bg-aqua/80"
     />
   );
 }
