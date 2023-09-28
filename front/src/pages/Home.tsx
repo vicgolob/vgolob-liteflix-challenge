@@ -1,77 +1,62 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef, useMemo, memo } from 'react';
 
 import { useMovieNowPlaying } from '@api/index';
-import { IMovie, SidePanelRefType } from '@interfaces/index';
+import { SidePanelRefType } from '@interfaces/index';
 import { CustomButton, NavBar, SidePanel } from '@components/index';
 import IconPlay from '@assets/icons/play.svg';
 import IconAdd from '@assets/icons/add.svg';
 import SidePanelContext from '@context/Context';
 import useScreenSize from '@hooks/useScreenSize';
 
-function Home() {
-  const { screenSize, screenIsPhoneSize } = useScreenSize();
-  const {
-    sidePanelIsOpen,
-    toggleSidePanelIsOpen,
-    sidePanelIsMobile,
-    setSidePanelIsMobile,
-  } = useContext(SidePanelContext);
-  const sidePanelRef = useRef<SidePanelRefType>(null);
-  const { nowPlayingMovies, isLoading } = useMovieNowPlaying();
-  const [nowPlayingMovie, setNowPlayingMovie] = useState<IMovie>();
+const Home = memo(() => {
+  const { screenIsPhoneSize } = useScreenSize();
+  const isScreenPhone = useMemo(() => screenIsPhoneSize(), [screenIsPhoneSize]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { sidePanelIsOpen, toggleSidePanelIsOpen } =
+    useContext(SidePanelContext);
+  const sidePanelRef = useRef<SidePanelRefType>(null);
+  const { nowPlayingMovies } = useMovieNowPlaying();
   const [currentNowPlayingMovieIndex, setCurrentNowPlayingMovieIndex] =
     useState(0);
-
-  const updateNowPlayingMovieIndex = () => {
-    setCurrentNowPlayingMovieIndex((prevIndex) =>
-      prevIndex < nowPlayingMovies.length ? prevIndex + 1 : 0,
-    );
-  };
+  const intervalRef = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
-    if (!isLoading && nowPlayingMovies.length) {
-      // first load
-      setNowPlayingMovie(nowPlayingMovies[0]);
+    const nextIndex = () => {
+      setCurrentNowPlayingMovieIndex((prevIndex) =>
+        prevIndex < nowPlayingMovies.length - 1 ? prevIndex + 1 : 0,
+      );
+    };
 
-      // schedule update
-      const intervalId = setInterval(() => {
-        updateNowPlayingMovieIndex();
-      }, 5000);
-
-      return () => clearInterval(intervalId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
-
-  useEffect(() => {
-    setNowPlayingMovie(nowPlayingMovies[currentNowPlayingMovieIndex]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentNowPlayingMovieIndex]);
-
-  useEffect(() => {
-    const isScreenPhone = screenIsPhoneSize();
-
-    if (sidePanelIsMobile !== isScreenPhone) {
-      sidePanelRef.current && sidePanelRef.current.forceClosePanel();
-      setSidePanelIsMobile(isScreenPhone);
+    if (nowPlayingMovies.length > 0) {
+      intervalRef.current = setInterval(nextIndex, 5000);
     }
 
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [nowPlayingMovies]);
+
+  const backgroundImage = nowPlayingMovies.length
+    ? `url(${process.env.REACT_APP_IMDB_IMAGE}${nowPlayingMovies[currentNowPlayingMovieIndex]?.backdrop_path}) 50% / cover no-repeat`
+    : undefined;
+
+  /* Controla cuando se ejecuta la función para cerrar el SidePanel */
+  useEffect(() => {
+    sidePanelIsOpen &&
+      sidePanelRef.current &&
+      sidePanelRef.current.forceClosePanel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screenSize.width]);
+  }, [isScreenPhone]);
 
   return (
     <div data-testid="home" className="relative">
+      {/* Slide con las portadas de las películas */}
       <div
         className="absolute w-full h-[550px] md:h-screen transition-all duration-[2.5s] ease-in-out"
-        style={{
-          background: nowPlayingMovie
-            ? `url(${process.env.REACT_APP_IMDB_IMAGE}${
-                nowPlayingMovie!.backdrop_path
-              }) 50% / cover no-repeat`
-            : undefined,
-        }}></div>
+        style={{ background: backgroundImage }}></div>
+
       <main
         className={`${
           sidePanelIsOpen ? 'fixed' : 'relative'
@@ -80,7 +65,7 @@ function Home() {
           background: 'linear-gradient(transparent, rgb(var(--black))',
         }}>
         <NavBar
-          showPhoneScreenLayout={screenIsPhoneSize()}
+          showPhoneScreenLayout={isScreenPhone}
           onMenuButtonPress={toggleSidePanelIsOpen}
         />
 
@@ -88,19 +73,19 @@ function Home() {
         {sidePanelIsOpen && (
           <SidePanel
             ref={sidePanelRef}
-            showPhoneScreenLayout={screenIsPhoneSize()}
+            showPhoneScreenLayout={isScreenPhone}
             onClosePanel={toggleSidePanelIsOpen}
           />
         )}
 
         <section className="md:min-h-[800px] relative flex flex-col md:flex-row space-y-16 md:justify-between">
-          {/* Now playing movie section */}
+          {/* Seccion 'Now Playing' */}
           <div className="h-[550px] md:h-auto md:w-3/4 flex flex-col justify-end space-y-4 items-center md:items-start">
             <p className="font-light text-white text-xl">
               Original de <span className="font-bold">liteflix</span>
             </p>
             <h1 className="font-bold text-aqua text-7xl tracking-[12px] text-center md:text-start">
-              {nowPlayingMovie?.title}
+              {nowPlayingMovies[currentNowPlayingMovieIndex]?.title}
             </h1>
             <div className="flex flex-col items-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-6">
               <CustomButton
@@ -121,7 +106,6 @@ function Home() {
             </div>
           </div>
 
-          {/* Popular movies section */}
           <div className="flex flex-col items-center">
             <div className="w-[150px] h-[18px] bg-sky-200 mb-6"></div>
             <div className="bg-red-400 h-[665px] lg:h-[665px] overflow-y-auto flex flex-col space-y-5">
@@ -136,6 +120,6 @@ function Home() {
       </main>
     </div>
   );
-}
+});
 
 export default Home;

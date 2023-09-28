@@ -4,6 +4,7 @@ import {
   forwardRef,
   useImperativeHandle,
   Ref,
+  memo,
 } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -28,6 +29,9 @@ function SidePanel(
   const initialPosition = showPhoneScreenLayout
     ? '-translate-x-full'
     : 'translate-x-[200%]';
+  const reversePosition = !showPhoneScreenLayout
+    ? '-translate-x-full'
+    : 'translate-x-[200%]';
   const [translateClassName, setTransalateClassName] =
     useState(initialPosition);
 
@@ -41,14 +45,18 @@ function SidePanel(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleClosePanel() {
-    setTransalateClassName(initialPosition);
+  function handleClosePanel({
+    revertCollapse = false,
+  }: {
+    revertCollapse?: boolean;
+  }) {
+    setTransalateClassName(revertCollapse ? reversePosition : initialPosition);
     // Espera a que termine la animación antes de cerrar el panel
     setTimeout(() => onClosePanel(), 1000);
   }
 
   useImperativeHandle(ref, () => ({
-    forceClosePanel: handleClosePanel,
+    forceClosePanel: () => handleClosePanel({ revertCollapse: true }),
   }));
 
   return (
@@ -59,7 +67,7 @@ function SidePanel(
         data-testid="side-panel"
         className={`fixed inset-0 z-50 font-regular h-full w-screen md:w-1/2 py-7 px-6 md:px-10 lg:px-20 md:py-7 bg-black md:bg-black/90 overflow-y-auto text-white transition-all ease-in-out duration-1000 transform ${translateClassName}`}>
         <div className="flex justify-between items-center">
-          <CloseButton onPress={handleClosePanel} />
+          <CloseButton onPress={() => handleClosePanel({})} />
 
           {showPhoneScreenLayout && (
             <>
@@ -95,7 +103,7 @@ function SidePanel(
             variant="ghost"
             text="cerrar sesión"
             label="cerrar sesión"
-            bgColorOnHover="bg-rose-600"
+            bgColorOnHover="bg-rose-600/80"
             onPress={() => {}}
           />
         </div>
@@ -104,4 +112,4 @@ function SidePanel(
   );
 }
 
-export default forwardRef(SidePanel);
+export default memo(forwardRef(SidePanel));
