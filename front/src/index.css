@@ -34,7 +34,9 @@
   a,
   button,
   li,
-  span {
+  span,
+  input,
+  ::placeholder {
     letter-spacing: 4px;
     text-transform: uppercase;
   }

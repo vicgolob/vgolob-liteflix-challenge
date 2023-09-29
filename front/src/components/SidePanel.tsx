@@ -23,7 +23,12 @@ function SidePanel(
   {
     showPhoneScreenLayout,
     onClosePanel,
-  }: { showPhoneScreenLayout: boolean; onClosePanel: Function },
+    onAddMovieButtonPress,
+  }: {
+    showPhoneScreenLayout: boolean;
+    onClosePanel: Function;
+    onAddMovieButtonPress?: Function;
+  },
   ref: Ref<SidePanelRefType>,
 ) {
   const initialPosition = showPhoneScreenLayout
@@ -96,7 +101,7 @@ function SidePanel(
             ))}
           </div>
           <div className="my-16 relative right-[4px]">
-            <AddMovieButton />
+            <AddMovieButton onPress={onAddMovieButtonPress} />
           </div>
           <CustomButton
             testId="end-sesion-button"

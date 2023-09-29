@@ -17,6 +17,7 @@ import IconPlay from '@assets/icons/play.svg';
 import IconAdd from '@assets/icons/add.svg';
 import SidePanelContext from '@context/Context';
 import useScreenSize from '@hooks/useScreenSize';
+import AddMovieModal from '@components/AddMovieModal';
 
 const Home = memo(() => {
   const { screenIsPhoneSize } = useScreenSize();
@@ -25,20 +26,29 @@ const Home = memo(() => {
   const { sidePanelIsOpen, toggleSidePanelIsOpen } =
     useContext(SidePanelContext);
   const sidePanelRef = useRef<SidePanelRefType>(null);
+
+  // Now Playing movies
   const { nowPlayingMovies } = useMovieNowPlaying();
   const [currentNowPlayingMovieIndex, setCurrentNowPlayingMovieIndex] =
     useState(0);
   const intervalRef = useRef<NodeJS.Timer | null>(null);
 
+  // Categories dropdown menu
   const { categories } = useGetMoviesSelectorCategories();
   const [selectedMovieCategory, setSelectedMovieCategory] =
     useState('idbm_popular');
   const [resetMoviesList, setResetMoviesList] = useState(false);
+  // Movies
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Movies List
   const { moviesPaginationResponse } = useFetchMoviesList(
     selectedMovieCategory,
     currentPage,
   );
+
+  // Upload file Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const nextIndex = () => {
@@ -99,6 +109,7 @@ const Home = memo(() => {
         <NavBar
           showPhoneScreenLayout={isScreenPhone}
           onMenuButtonPress={toggleSidePanelIsOpen}
+          onAddMovieButtonPress={() => setIsModalOpen(true)}
         />
 
         {/* SidePanel */}
@@ -107,6 +118,7 @@ const Home = memo(() => {
             ref={sidePanelRef}
             showPhoneScreenLayout={isScreenPhone}
             onClosePanel={toggleSidePanelIsOpen}
+            onAddMovieButtonPress={() => setIsModalOpen(true)}
           />
         )}
 
@@ -157,6 +169,13 @@ const Home = memo(() => {
           </div>
         </section>
       </main>
+
+      {isModalOpen && (
+        <AddMovieModal
+          showPhoneScreenLayout={isScreenPhone}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 });

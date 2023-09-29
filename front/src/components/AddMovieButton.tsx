@@ -1,7 +1,7 @@
 import { CustomButton } from '@components/index';
 import IconAdd from '@assets/icons/add.svg';
 
-function AddMovieButton() {
+function AddMovieButton({ onPress = () => {} }: { onPress?: Function }) {
   return (
     <CustomButton
       variant="ghost"
@@ -9,7 +9,7 @@ function AddMovieButton() {
       image={IconAdd}
       label="go to user's profile"
       text="agregar película"
-      onPress={() => {}}
+      onPress={onPress}
       bgColorOnHover="bg-aqua/80"
     />
   );

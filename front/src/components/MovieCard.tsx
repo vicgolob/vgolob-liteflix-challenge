@@ -8,7 +8,9 @@ function MovieCard({ movie }: { movie: MovieData }) {
     <div
       className="group relative w-full md:w-[250px] h-[166px] md:h-[146px] flex-shrink-0 font-regular text-white"
       style={{
-        background: `url(${movie.backdrop_path}) 50% / cover no-repeat`,
+        background: `url(${
+          movie.backdrop_path || movie.imageURL
+        }) 50% / cover no-repeat`,
       }}>
       <div
         className="absolute group-hover:hidden bottom-0  w-full  max-h-5/6 rounded flex flex-col justify-end items-center space-y-6 p-3"

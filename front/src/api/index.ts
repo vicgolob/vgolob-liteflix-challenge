@@ -48,6 +48,14 @@ export function myMoviesMock() {
   });
 }
 
+export function useMyMovies(page: number) {
+  const { data, error, isLoading } = useSWR(
+    `${process.env.REACT_APP_LITEFLIX_API}/movies?page=${page}`,
+    fetcher,
+  );
+  return { data, error, isLoading };
+}
+
 function transformData(response: FetchMoviesResponse) {
   return {
     ...response,
@@ -64,15 +72,13 @@ export function useGetMoviesSelectorCategories() {
 }
 
 export function useFetchMoviesList(category: string, page: number = 1) {
-  let url = 'getMyMovies';
-  let _fetcher: any = myMoviesMock;
+  let url = `${process.env.REACT_APP_LITEFLIX_API}/movies?page=${page}`;
   const fetchFromImdb = category === 'idbm_popular';
   if (fetchFromImdb) {
     url = `${process.env.REACT_APP_IMDB_API}/movie/popular?api_key=${process.env.REACT_APP_IMDB_KEY}&page=${page}`;
-    _fetcher = fetcher;
   }
 
-  let { data, error, isLoading } = useSWR(url, _fetcher) as SWRResponse<
+  let { data, error, isLoading } = useSWR(url, fetcher) as SWRResponse<
     FetchMoviesResponse,
     any,
     any

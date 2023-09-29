@@ -11,9 +11,11 @@ const NavBar = memo(
   ({
     showPhoneScreenLayout,
     onMenuButtonPress,
+    onAddMovieButtonPress,
   }: {
     showPhoneScreenLayout: boolean;
     onMenuButtonPress: Function;
+    onAddMovieButtonPress?: Function;
   }) => {
     return (
       <nav className="flex justify-between items-center">
@@ -31,7 +33,7 @@ const NavBar = memo(
           <>
             <div className="flex space-x-10 items-center">
               <Logo width={113} aria-label="Liteflix logo" />
-              <AddMovieButton />
+              <AddMovieButton onPress={onAddMovieButtonPress} />
             </div>
             <div className="flex space-x-10 items-center">
               <MenuButton onPress={onMenuButtonPress} />

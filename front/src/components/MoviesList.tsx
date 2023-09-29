@@ -39,7 +39,7 @@ const MoviesList = memo(
           <MovieCard key={key} movie={movie} />
         ))}
 
-        {moviesToDisplay.length && currentPage < totalPages && (
+        {moviesToDisplay.length > 0 && currentPage < totalPages && (
           <CustomButton
             variant="secondary"
             testId="load-more-button"

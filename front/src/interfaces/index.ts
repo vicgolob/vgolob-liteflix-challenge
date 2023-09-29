@@ -1,6 +1,7 @@
 export interface MovieData {
   id: number;
   backdrop_path: string;
+  imageURL?: string;
   title: string;
   vote_average?: number;
   release_date?: string;
