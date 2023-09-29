@@ -20,6 +20,8 @@ import useScreenSize from '@hooks/useScreenSize';
 import AddMovieModal from '@components/AddMovieModal';
 
 const Home = memo(() => {
+  console.log('>>>>', process.env.REACT_APP_LITEFLIX_API);
+
   const { screenIsPhoneSize } = useScreenSize();
   const isScreenPhone = useMemo(() => screenIsPhoneSize(), [screenIsPhoneSize]);
 
